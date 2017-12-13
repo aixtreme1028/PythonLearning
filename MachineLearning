@@ -1,11 +1,10 @@
-#-*- coding:utf-8 -*-
 import xlrd
 import xlwt
 from sklearn import svm
 import numpy as np  
 import pandas as pd
 
-moData = xlrd.open_workbook(r'C:/Users/tony.zhou/Downloads/OpenMO1.xlsx')
+moData = xlrd.open_workbook(r'C:/Users/admin/Downloads/OpenMO1.xlsx')
 moTable = moData.sheets()[0]
 X = list()
 y = []
@@ -18,7 +17,7 @@ for i in range(moTable.nrows):
 clf = svm.SVC() 
 clf.fit(X,y)
 
-mo2Data = xlrd.open_workbook(r'C:/Users/tony.zhou/Downloads/OpenMO2.xlsx')
+mo2Data = xlrd.open_workbook(r'C:/Users/admin/Downloads/OpenMO2.xlsx')
 mo2Table = mo2Data.sheets()[0]
 X2 = list()
 y2 = list()
@@ -30,4 +29,4 @@ for j in range(mo2Table.nrows):
 		X2 = [mo2Table.row_values(j)[1:5]]	
 		y2.append(clf.predict(X2))
 dataFrame = pd.DataFrame({'status':y2})
-dataFrame.to_csv(r'C:\Users\tony.zhou\Downloads\test.csv',index=False,sep=',')
+dataFrame.to_csv(r'C:\Users\admin\Downloads\test.csv',index=False,sep=',')
