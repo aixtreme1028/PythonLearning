@@ -1,0 +1,47 @@
+from bs4 import BeautifulSoup
+from urllib.request import urlopen
+#from string import lowercase
+import csv
+
+def playerUrl(url):
+	soup = BeautifulSoup(urlopen(url))
+	players = soup.find(id='players').contents[5].find_all('tr')
+	active = []
+	for tr in players:
+		td = tr.find_all('td')[0]
+		if td.find('strong'):
+			active.append(td.find('a')['href'])
+	return active
+
+def playerData(player_url):
+	url = 'https://www.basketball-reference.com' + player_url
+	soup = BeautifulSoup(urlopen(url))
+	# player info
+	playersdata = []
+	spans = soup.find(id="info_box").find_all('span', 'bold_text')
+	for span in spans:
+		playersdata[0] = soup.find('h1').string
+		if span.string == 'Height:':
+			playersdata[1] = span.next_sibling[1:-3]
+		if span.string == 'Weight:':
+			playersdata[2] = span.next_sibling[1:8]
+		if span.string == 'Experience:':
+			s = span.next_sibling[1:]
+			playersdata[3] = int(s.split(' ')[0])
+		#with open("C:\Users\admin\Downloads\nbaData.csv","wb",encoding = 'utf-8', newline = '') as csvfile: 
+		#	writer = csv.writer(csvfile)
+		#	writer.writerow([splayersdata[0],playersdata[1],playersdata[2],playersdata[3]])
+		print(playersdata)
+
+	
+def getNBAData():
+	abc = 'abcdefghijklmnopqrstuvwyz'
+	player_urls = []
+	for s in abc:
+		url = 'https://www.basketball-reference.com/players/'+ s +'/'
+		player_urls.extend(playerUrl(url))
+	for url in player_urls:
+		playerData(url)
+	return 0
+	
+getNBAData()
